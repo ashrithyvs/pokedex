@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button, Container, Spinner } from "react-bootstrap";
 import Pokemon from "./components/Pokemon/Pokemon";
 
@@ -10,16 +11,16 @@ const App = () => {
   );
 
   const getAllPokemons = async () => {
-    const res = await fetch(loadMore);
+    const res = await axios.get(loadMore).catch((err) => console.error(err));
     const data = await res.json();
 
     setLoadMore(data.next);
 
     function createPokemonObject(results) {
       results.forEach(async (pokemon) => {
-        const res = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
-        );
+        const res = await axios
+          .get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`)
+          .catch((err) => console.error(err));
         const data = await res.json();
         setAllPokemons((currentList) => [...currentList, data]);
         await pokedex.sort((a, b) => a.id - b.id);
