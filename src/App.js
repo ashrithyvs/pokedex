@@ -12,17 +12,17 @@ const App = () => {
   );
 
   const getAllPokemons = async () => {
-    const res = await axios.get(loadMore).catch((err) => console.error(err));
-    const data = await res.json();
+    const { data } = await axios
+      .get(loadMore)
+      .catch((err) => console.error(err));
 
     setLoadMore(data.next);
 
     function createPokemonObject(results) {
       results.forEach(async (pokemon) => {
-        const res = await axios
+        const { data } = await axios
           .get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`)
           .catch((err) => console.error(err));
-        const data = await res.json();
         setAllPokemons((currentList) => [...currentList, data]);
         await pokedex.sort((a, b) => a.id - b.id);
         setLoading(false);
